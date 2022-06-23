@@ -18,6 +18,7 @@ export const Footer = () => {
               href="https://github.com/azagatti"
               ml="8"
               fontSize="24"
+              style={{ textDecoration: 'none' }}
             >
               🐙
             </Link>
@@ -27,6 +28,7 @@ export const Footer = () => {
               href="https://www.linkedin.com/in/andre-zagatti/"
               ml="8"
               fontSize="24"
+              style={{ textDecoration: 'none' }}
             >
               💻
             </Link>
