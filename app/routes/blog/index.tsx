@@ -1,53 +1,21 @@
+import { useLoaderData } from '@remix-run/react'
 import { ArticlesList } from '~/components/articles-list'
+import { getArticlesList } from '~/services/articles.server'
 
-const articles = [
-  {
-    img: 'https://i.picsum.photos/id/395/1080/720.jpg?hmac=byCZIXjUUy7OKldSyOzNE-17JWgRkTK3a4SIq4c3VeA',
-    title: 'Javascript Async',
-  },
-  {
-    img: 'https://i.picsum.photos/id/395/1080/720.jpg?hmac=byCZIXjUUy7OKldSyOzNE-17JWgRkTK3a4SIq4c3VeA',
-    title: 'Javascript Async',
-  },
-  {
-    img: 'https://i.picsum.photos/id/395/1080/720.jpg?hmac=byCZIXjUUy7OKldSyOzNE-17JWgRkTK3a4SIq4c3VeA',
-    title: 'Javascript Async',
-  },
-  {
-    img: 'https://i.picsum.photos/id/395/1080/720.jpg?hmac=byCZIXjUUy7OKldSyOzNE-17JWgRkTK3a4SIq4c3VeA',
-    title: 'Javascript Async',
-  },
-  {
-    img: 'https://i.picsum.photos/id/395/1080/720.jpg?hmac=byCZIXjUUy7OKldSyOzNE-17JWgRkTK3a4SIq4c3VeA',
-    title: 'Javascript Async',
-  },
-  {
-    img: 'https://i.picsum.photos/id/395/1080/720.jpg?hmac=byCZIXjUUy7OKldSyOzNE-17JWgRkTK3a4SIq4c3VeA',
-    title: 'Javascript Async',
-  },
-  {
-    img: 'https://i.picsum.photos/id/395/1080/720.jpg?hmac=byCZIXjUUy7OKldSyOzNE-17JWgRkTK3a4SIq4c3VeA',
-    title: 'Javascript Async',
-  },
-  {
-    img: 'https://i.picsum.photos/id/395/1080/720.jpg?hmac=byCZIXjUUy7OKldSyOzNE-17JWgRkTK3a4SIq4c3VeA',
-    title: 'Javascript Async',
-  },
-  {
-    img: 'https://i.picsum.photos/id/395/1080/720.jpg?hmac=byCZIXjUUy7OKldSyOzNE-17JWgRkTK3a4SIq4c3VeA',
-    title: 'Javascript Async',
-  },
-  {
-    img: 'https://i.picsum.photos/id/395/1080/720.jpg?hmac=byCZIXjUUy7OKldSyOzNE-17JWgRkTK3a4SIq4c3VeA',
-    title: 'Javascript Async',
-  },
-  {
-    img: 'https://i.picsum.photos/id/395/1080/720.jpg?hmac=byCZIXjUUy7OKldSyOzNE-17JWgRkTK3a4SIq4c3VeA',
-    title: 'Javascript Async',
-  },
-]
+export const loader = async () => {
+  const mdx = await getArticlesList()
+  return {
+    articles: mdx.map((art) => ({
+      frontmatter: art.post.frontmatter,
+      image: art.image,
+      readingTime: art.readingTime,
+    })),
+  }
+}
 
 const BlogIndex = () => {
+  const { articles } = useLoaderData()
+
   return <ArticlesList articles={articles} />
 }
 

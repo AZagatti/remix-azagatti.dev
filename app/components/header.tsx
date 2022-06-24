@@ -1,10 +1,13 @@
-import { Flex, Link, Heading, Button, Text } from '@chakra-ui/react'
+import { Flex, Link, Heading, Button, useColorMode } from '@chakra-ui/react'
 import { Link as RemixLink } from '@remix-run/react'
+import { SunIcon, MoonIcon } from '@chakra-ui/icons'
 
 export const Header = () => {
+  const { colorMode, toggleColorMode } = useColorMode()
+
   return (
     <Flex align="center" justify="center" w="100%" mb="16" paddingY="4">
-      <Flex as="nav" w="5xl" justify="space-between" align="center">
+      <Flex as="nav" w="6xl" justify="space-between" align="center">
         <Heading as="h2" size="lg">
           <Link
             to="/"
@@ -13,14 +16,14 @@ export const Header = () => {
               textDecoration: 'none',
             }}
             _hover={{
-              opacity: 0.8,
+              opacity: 0.7,
             }}
           >
             André Zagatti
           </Link>
         </Heading>
-        <Button bg="transparent">
-          <Text>☀️</Text>
+        <Button bg="transparent" onClick={toggleColorMode}>
+          {colorMode === 'dark' ? <SunIcon /> : <MoonIcon />}
         </Button>
       </Flex>
     </Flex>

@@ -1,4 +1,11 @@
 export const theme = {
+  config: {
+    useSystemColorMode: true,
+  },
+  fonts: {
+    heading: `'Nunito', san-serif`,
+    body: `'Roboto', sans-serif`,
+  },
   colors: {
     gray: {
       '50': '#F3F2F2',
