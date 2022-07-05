@@ -45,6 +45,7 @@ const getSlugList = async () => {
     dir1: fsSync.readdirSync(__dirname),
     dir2: fsSync.readdirSync(path.resolve(__dirname, '..')),
     dir3: fsSync.readdirSync(path.resolve(__dirname, '..', '..')),
+    dir4: fsSync.readdirSync(path.resolve(__dirname, '..', '___vc')),
   })
   if (slugList.length) {
     return slugList
