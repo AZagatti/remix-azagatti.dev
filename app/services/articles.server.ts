@@ -109,7 +109,7 @@ export const getArticle = async (slug: string): Promise<Post> => {
   const { default: remarkSlug } = await import('remark-slug')
   const { default: gfm } = await import('remark-gfm')
 
-  const cachedArticle = articlesCache.get(articlesCache)
+  const cachedArticle = articlesCache.get(slug)
   if (cachedArticle) {
     return cachedArticle
   } else {

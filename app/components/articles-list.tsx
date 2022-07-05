@@ -26,8 +26,9 @@ export const ArticlesList = ({ articles }: ArticlesListProps) => {
       columnGap="4"
       minH="100vh"
       m="4"
-      w="6xl"
-      gridTemplateColumns="repeat(3, 1fr)"
+      maxW="6xl"
+      px="8"
+      gridTemplateColumns={['1fr', 'repeat(2,1fr)', 'repeat(3,1fr)']}
     >
       {articles.map((article) => (
         <GridItem key={article.frontmatter.title} mt="auto" h="100%">

@@ -7,7 +7,14 @@ export const Header = () => {
 
   return (
     <Flex align="center" justify="center" w="100%" mb="16" paddingY="4">
-      <Flex as="nav" w="6xl" justify="space-between" align="center">
+      <Flex
+        as="nav"
+        maxW="8xl"
+        px="8"
+        justify="space-between"
+        align="center"
+        flex="1"
+      >
         <Heading as="h2" size="lg">
           <Link
             to="/"

@@ -62,28 +62,28 @@ A minha definição de eficiente é, com uma API boa de se utilizar e que tenha 
 performance independente do tamanho da aplicação.
 
 ```tsx
-import { createContext, ReactNode, useCallback, useState } from 'react';
+import { createContext, ReactNode, useCallback, useState } from 'react'
 
 interface CounterContextType {
-  counter: number;
-  increment: () => void;
-  decrement: () => void;
+  counter: number
+  increment: () => void
+  decrement: () => void
 }
 
 const counterContext = createContext<CounterContextType>(
-  {} as CounterContextType,
-);
+  {} as CounterContextType
+)
 
 const CounterProvider = ({ children }: { children: ReactNode }) => {
-  const [counter, setCounter] = useState(0);
+  const [counter, setCounter] = useState(0)
 
   const increment = useCallback(() => {
-    setCounter((c) => c + 1);
-  }, []);
+    setCounter((c) => c + 1)
+  }, [])
 
   const decrement = useCallback(() => {
-    setCounter((c) => c - 1);
-  }, []);
+    setCounter((c) => c - 1)
+  }, [])
 
   return (
     <counterContext.Provider
@@ -95,10 +95,10 @@ const CounterProvider = ({ children }: { children: ReactNode }) => {
     >
       {children}
     </counterContext.Provider>
-  );
-};
+  )
+}
 
-export { CounterProvider, counterContext };
+export { CounterProvider, counterContext }
 ```
 
 Normalmente definimos um contexto dessa forma, vou utilizar um exemplo de contador
@@ -107,51 +107,51 @@ bem simples, mas imaginemos algo em escala maior.
 Para acompanhar as renderizações vou criar um `hook` e utilizar nos componentes
 
 ```tsx
-import { useRef } from 'react';
+import { useRef } from 'react'
 
 export const useRenderCounter = (componentName: string) => {
-  const renderCount = useRef(0);
-  renderCount.current = renderCount.current + 1;
+  const renderCount = useRef(0)
+  renderCount.current = renderCount.current + 1
 
   return (
     <>
       <h3>{`${componentName} have: ${renderCount.current} renders`}</h3>
       <hr />
     </>
-  );
-};
+  )
+}
 ```
 
 Para vermos as novas renderizações acontecendo vou separar em três componentes que
 utilizam esse contexto acima.
 
 ```tsx
-import { useContext } from 'react';
+import { useContext } from 'react'
 
-import { useRenderCounter } from '../hooks/useRenderCounter';
-import { counterContext } from './ContextDefault';
+import { useRenderCounter } from '../hooks/useRenderCounter'
+import { counterContext } from './ContextDefault'
 
 export const ShowCounter = () => {
-  const renderCount = useRenderCounter('ShowCounter');
+  const renderCount = useRenderCounter('ShowCounter')
 
-  const { counter } = useContext(counterContext);
+  const { counter } = useContext(counterContext)
 
   return (
     <>
       <h2>Counter: {counter}</h2>
       {renderCount}
     </>
-  );
-};
+  )
+}
 ```
 
 ```tsx
 // ...same imports
 
 export const IncrementCounter = () => {
-  const renderCount = useRenderCounter('IncrementCounter');
+  const renderCount = useRenderCounter('IncrementCounter')
 
-  const { increment } = useContext(counterContext);
+  const { increment } = useContext(counterContext)
 
   return (
     <>
@@ -160,17 +160,17 @@ export const IncrementCounter = () => {
       </button>
       {renderCount}
     </>
-  );
-};
+  )
+}
 ```
 
 ```tsx
 // ...same imports
 
 export const DecrementCounter = () => {
-  const renderCount = useRenderCounter('DecrementCounter');
+  const renderCount = useRenderCounter('DecrementCounter')
 
-  const { decrement } = useContext(counterContext);
+  const { decrement } = useContext(counterContext)
 
   return (
     <>
@@ -179,19 +179,19 @@ export const DecrementCounter = () => {
       </button>
       {renderCount}
     </>
-  );
-};
+  )
+}
 ```
 
 Com os componentes criados podemos centralizá-los e utilizar o `Provider` criado
 no arquivo de contexto.
 
 ```tsx
-import { CounterProvider } from './ContextDefault';
+import { CounterProvider } from './ContextDefault'
 
-import { ShowCounter } from './ShowCounter';
-import { IncrementCounter } from './IncrementCounter';
-import { DecrementCounter } from './DecrementCounter';
+import { ShowCounter } from './ShowCounter'
+import { IncrementCounter } from './IncrementCounter'
+import { DecrementCounter } from './DecrementCounter'
 
 export const MainDefaultContext = () => {
   return (
@@ -201,15 +201,21 @@ export const MainDefaultContext = () => {
       <IncrementCounter />
       <DecrementCounter />
     </CounterProvider>
-  );
-};
+  )
+}
 ```
 
 Testando:
 
 <iframe
   src="https://codesandbox.io/embed/context-default-nvxmm?fontsize=14&hidenavigation=1&theme=dark"
-  style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+  style={{
+    width: '100%',
+    height: 500,
+    border: 0,
+    borderRadius: 4,
+    overflow: 'hidden',
+  }}
   title="context-default"
   allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
@@ -231,29 +237,29 @@ A declaração do contexto não é muito diferente, só muda que utilizamos
 a função fornecida pela biblioteca.
 
 ```tsx
-import { ReactNode, useCallback, useState } from 'react';
-import { createContext } from 'use-context-selector';
+import { ReactNode, useCallback, useState } from 'react'
+import { createContext } from 'use-context-selector'
 
 interface CounterContextType {
-  counter: number;
-  increment: () => void;
-  decrement: () => void;
+  counter: number
+  increment: () => void
+  decrement: () => void
 }
 
 const counterContext = createContext<CounterContextType>(
-  {} as CounterContextType,
-);
+  {} as CounterContextType
+)
 
 const CounterProvider = ({ children }: { children: ReactNode }) => {
-  const [counter, setCounter] = useState(0);
+  const [counter, setCounter] = useState(0)
 
   const increment = useCallback(() => {
-    setCounter((c) => c + 1);
-  }, []);
+    setCounter((c) => c + 1)
+  }, [])
 
   const decrement = useCallback(() => {
-    setCounter((c) => c - 1);
-  }, []);
+    setCounter((c) => c - 1)
+  }, [])
 
   return (
     <counterContext.Provider
@@ -265,10 +271,10 @@ const CounterProvider = ({ children }: { children: ReactNode }) => {
     >
       {children}
     </counterContext.Provider>
-  );
-};
+  )
+}
 
-export { CounterProvider, counterContext };
+export { CounterProvider, counterContext }
 ```
 
 Agora a maior diferença fica na hora de utilizarmos o Context criado, ainda podemos
@@ -276,23 +282,23 @@ consumir o contexto com o hook `useContext` fornecido pela biblioteca, mas o mot
 de estarmos utilizando ela é o hook `useContextSelector`.
 
 ```tsx
-import { useContextSelector } from 'use-context-selector';
+import { useContextSelector } from 'use-context-selector'
 
-import { counterContext } from './ContextSelector';
-import { useRenderCounter } from '../hooks/useRenderCounter';
+import { counterContext } from './ContextSelector'
+import { useRenderCounter } from '../hooks/useRenderCounter'
 
 export const ShowCounter = () => {
-  const renderCount = useRenderCounter('ShowCounter');
+  const renderCount = useRenderCounter('ShowCounter')
 
-  const counter = useContextSelector(counterContext, ({ counter }) => counter);
+  const counter = useContextSelector(counterContext, ({ counter }) => counter)
 
   return (
     <>
       <h2>Counter: {counter}</h2>
       {renderCount}
     </>
-  );
-};
+  )
+}
 ```
 
 Primeiro passamos o contexto que será utilizado e como segundo parâmetro do hook
@@ -311,8 +317,8 @@ const cartInfos = useContextSelector(myContext, ({ cart }) => {
     cartAmount: cart.length,
     cartIsEmpty: !cart.length,
     isHavePotatoOnCart: cart.some((product) => product.name === 'Potato'),
-  };
-});
+  }
+})
 ```
 
 Por conta desse `hook` e os recursos fornecidos acho muito interessante utilizar
@@ -326,12 +332,12 @@ do contexto.
 // ...same imports
 
 export const IncrementCounter = () => {
-  const renderCount = useRenderCounter('IncrementCounter');
+  const renderCount = useRenderCounter('IncrementCounter')
 
   const increment = useContextSelector(
     counterContext,
-    ({ increment }) => increment,
-  );
+    ({ increment }) => increment
+  )
 
   return (
     <>
@@ -340,20 +346,20 @@ export const IncrementCounter = () => {
       </button>
       {renderCount}
     </>
-  );
-};
+  )
+}
 ```
 
 ```tsx
 // ...same imports
 
 export const DecrementCounter = () => {
-  const renderCount = useRenderCounter('DecrementCounter');
+  const renderCount = useRenderCounter('DecrementCounter')
 
   const decrement = useContextSelector(
     counterContext,
-    ({ decrement }) => decrement,
-  );
+    ({ decrement }) => decrement
+  )
 
   return (
     <>
@@ -362,8 +368,8 @@ export const DecrementCounter = () => {
       </button>
       {renderCount}
     </>
-  );
-};
+  )
+}
 ```
 
 E agora hora de testar, será que esse hook fornece somente uma forma mais detalhada
@@ -371,7 +377,13 @@ de consumirmos os valores de um contexto ou realmente interfere na performance?
 
 <iframe
   src="https://codesandbox.io/embed/context-selector-px64l?fontsize=14&hidenavigation=1&theme=dark"
-  style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+  style={{
+    width: '100%',
+    height: 500,
+    border: 0,
+    borderRadius: 4,
+    overflow: 'hidden',
+  }}
   title="context-selector"
   allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
@@ -384,7 +396,13 @@ Versão final com os dois exemplos:
 
 <iframe
   src="https://codesandbox.io/embed/context-efficiently-g70yv?fontsize=14&hidenavigation=1&theme=dark"
-  style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+  style={{
+    width: '100%',
+    height: 500,
+    border: 0,
+    borderRadius: 4,
+    overflow: 'hidden',
+  }}
   title="context-efficiently"
   allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
