@@ -16,7 +16,7 @@ interface Post {
 
 const postsDir =
   process.env.NODE_ENV === 'production'
-    ? path.resolve(__dirname, '..', '..', 'app', 'content', 'posts')
+    ? path.resolve(__dirname, '..', 'public', 'content', 'posts')
     : path.resolve(__dirname, '..', 'app', 'content', 'posts')
 const slugList: string[] = []
 const postsLists: Post[] = []
