@@ -12,6 +12,7 @@ interface Frontmatter {
 
 interface ArticlesListProps {
   articles: {
+    slug: string
     frontmatter: Frontmatter
     image: string
     readingTime: string
@@ -31,7 +32,7 @@ export const ArticlesList = ({ articles }: ArticlesListProps) => {
       {articles.map((article) => (
         <GridItem key={article.frontmatter.title} mt="auto" h="100%">
           <Link
-            to="#"
+            to={`/blog/${article.slug}`}
             style={{
               textDecoration: 'none',
             }}

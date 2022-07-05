@@ -6,6 +6,7 @@ export const loader = async () => {
   const mdx = await getArticlesList()
   return {
     articles: mdx.map((art) => ({
+      slug: art.slug,
       frontmatter: art.post.frontmatter,
       image: art.image,
       readingTime: art.readingTime,

@@ -1,14 +1,15 @@
 ---
 title: Testes no Frontend
-date: "2020-11-10"
-description: "Como criar testes no frontend e sua importancia"
+date: '2020-11-10'
+description: 'Como criar testes no frontend e sua importancia'
 tags: [html, css, javascript, js, react, react-native, testing-library, enzyme]
-keywords: [html, css, javascript, js, react, react-native, testing-library, enzyme]
+keywords:
+  [html, css, javascript, js, react, react-native, testing-library, enzyme]
 ---
 
 ![React Testing](banner.png)
 
---- 
+---
 
 ## Por quê criar testes?
 
@@ -36,7 +37,7 @@ refatoração no código os testes podem acabar falhando, gerando um falso negat
 No caso dos falsos positivos, eles podem aparecer quando não é testado todo o
 detalhe, passando bugs pelos testes.
 
-Se quiser mais informações e exemplos recomendo 
+Se quiser mais informações e exemplos recomendo
 [esse artigo](https://kentcdodds.com/blog/testing-implementation-details) do Kent C. Dodds.
 
 ## Tooling
@@ -63,37 +64,37 @@ com essa API leia [este post](https://blog.azagatti.dev/migrate-to-hooks/) aqui.
 De início vou criar uma estrutura simples de roteamento com o `react-router-dom`
 
 ```tsx
-import React from "react";
-import { Switch, Route } from "react-router-dom";
+import React from 'react'
+import { Switch, Route } from 'react-router-dom'
 
-import Home from "./pages/Home";
-import List from "./pages/List";
+import Home from './pages/Home'
+import List from './pages/List'
 
 const Routes = () => (
   <Switch>
     <Route path="/" exact component={Home} />
     <Route path="/list" component={List} />
   </Switch>
-);
+)
 
-export default Routes;
+export default Routes
 ```
 
 Com o arquivo de roteamento criado, só preciso chamá-lo no `App.tsx` que é o
 primeiro componente da aplicação.
 
 ```tsx
-import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import React from 'react'
+import { BrowserRouter } from 'react-router-dom'
 
-import Routes from "./routes";
+import Routes from './routes'
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes />
     </BrowserRouter>
-  );
+  )
 }
 ```
 
@@ -101,22 +102,22 @@ Agora vou passar rapidamente pelas duas telas que criei e explico o
 funcionamento de cada uma.
 
 ```tsx
-import React, { FormEvent, useCallback, useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { FormEvent, useCallback, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
 const Home = () => {
-  const [name, setName] = useState("");
-  const history = useHistory();
+  const [name, setName] = useState('')
+  const history = useHistory()
 
   const handleSubmit = useCallback(
     (e: FormEvent) => {
-      e.preventDefault();
+      e.preventDefault()
       if (name) {
-        history.push("/list", { name });
+        history.push('/list', { name })
       }
     },
     [history, name]
-  );
+  )
 
   return (
     <form onSubmit={handleSubmit}>
@@ -130,10 +131,10 @@ const Home = () => {
       </label>
       <button type="submit">Ver repos</button>
     </form>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
 ```
 
 Essa é a tela inicial, contém somente um input e tem a responsabilidade de
@@ -141,37 +142,37 @@ enviar o valor digitado pelo usuário para a tela que vai listar os repositório
 Github do nome inserido.
 
 ```tsx
-import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import axios from "axios";
+import React, { useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import axios from 'axios'
 
 interface IRepo {
-  id: number;
-  name: string;
-  description: string | null;
-  url: string;
-  stargazers_count: number;
-  forks: number;
-  open_issues: number;
+  id: number
+  name: string
+  description: string | null
+  url: string
+  stargazers_count: number
+  forks: number
+  open_issues: number
 }
 
 const List = () => {
-  const { state } = useLocation<{ name: string } | undefined>();
+  const { state } = useLocation<{ name: string } | undefined>()
 
-  const [repos, setRepos] = useState<IRepo[]>([]);
+  const [repos, setRepos] = useState<IRepo[]>([])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       try {
         const { data } = await axios.get(
           `https://api.github.com/users/${state?.name}/repos`
-        );
-        setRepos(data);
+        )
+        setRepos(data)
       } catch (err) {
-        console.error(err);
+        console.error(err)
       }
-    })();
-  }, [state?.name]);
+    })()
+  }, [state?.name])
 
   return (
     <div>
@@ -186,17 +187,17 @@ const List = () => {
                 Link
               </a>
             </div>
-            <span>Stars: {repo.stargazers_count}</span>{" "}
-            <span>Forks: {repo.forks}</span>{" "}
-            <span>Issues: {repo.open_issues}</span>{" "}
+            <span>Stars: {repo.stargazers_count}</span> <span>
+              Forks: {repo.forks}
+            </span> <span>Issues: {repo.open_issues}</span>{' '}
           </li>
         ))}
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default List;
+export default List
 ```
 
 Essa tela tem a responsabilidade de buscar os repositórios do usuário utilizando
@@ -206,12 +207,12 @@ a API do Github e lista-los.
 
 Agora vamos para a parte que importa do post, criar os primeiros testes.
 
-Para criar o arquivo de testes podemos utilizar a extensão `File.test.tsx` ou 
+Para criar o arquivo de testes podemos utilizar a extensão `File.test.tsx` ou
 `File.spec.tsx`, no caso o final dá extensão é o mesmo do seu arquivo, em testes
 unitários costumo utilizar com `spec`.
 
 Nesse primeiro teste já posso explicar o por que ter criado o roteamento entre
-páginas para esse exemplo, foi para mostrar como fazer o 
+páginas para esse exemplo, foi para mostrar como fazer o
 [mock](https://pt.wikipedia.org/wiki/Objeto_mock) de bibliotecas.
 
 Para começar o teste normalmente utilizamos o `describe` para informar uma suíte
@@ -223,8 +224,8 @@ no teste o `it` se torna mais semântico, como nesse exemplo:
 "Deve ir para a página List".
 
 ```tsx
-describe("Home", () => {
-  it ("should go to List Page", () => {
+describe('Home', () => {
+  it('should go to List Page', () => {
     // implementation
   })
 })
@@ -238,42 +239,42 @@ e pegar as funções `getByPlaceholderText` e `getByText` que são utilizadas pa
 selecionar elementos que foram renderizados do componente na função `render`.
 
 ```tsx
-import React from "react";
-import { render } from "@testing-library/react"; 
+import React from 'react'
+import { render } from '@testing-library/react'
 
-import Home from "./Home";
+import Home from './Home'
 
-describe("Home", () => {
-  it("should go to List page", () => {
-    const { getByPlaceholderText, getByText } = render(<Home />);
+describe('Home', () => {
+  it('should go to List page', () => {
+    const { getByPlaceholderText, getByText } = render(<Home />)
 
     // implementation
-  });
-});
+  })
+})
 ```
 
 Para disparar eventos do DOM no teste, importamos a função `fireEvent` também da
-testing-library e utilizamos o evento `change` para alterar o valor do input, 
+testing-library e utilizamos o evento `change` para alterar o valor do input,
 temos que seguir a estrutura do evento, por isso é um objeto com uma chave target,
 que é outro objeto com a chave value e o valor do input. Também com o `fireEvent` disparamos um `click` no botão que seria o comportamento
 de ir para a página List com o valor que foi digitado no input.
 
 ```tsx
-import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import React from 'react'
+import { render, fireEvent } from '@testing-library/react'
 
-import Home from "./Home";
+import Home from './Home'
 
-describe("Home", () => {
-  it("should go to List page", () => {
-    const { getByPlaceholderText, getByText } = render(<Home />);
+describe('Home', () => {
+  it('should go to List page', () => {
+    const { getByPlaceholderText, getByText } = render(<Home />)
 
-    fireEvent.change(getByPlaceholderText("User"), {
-      target: { value: "azagatti" },
-    });
-    fireEvent.click(getByText("Ver repos"));
-  });
-});
+    fireEvent.change(getByPlaceholderText('User'), {
+      target: { value: 'azagatti' },
+    })
+    fireEvent.click(getByText('Ver repos'))
+  })
+})
 ```
 
 Para saber se o teste passou ou não adicionamos o `expect`, dentro dele como
@@ -283,23 +284,23 @@ que o input com o placeholder `User` tenha o valor que passei no evento, no caso
 `azagatti`.
 
 ```tsx
-import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import React from 'react'
+import { render, fireEvent } from '@testing-library/react'
 
-import Home from "./Home";
+import Home from './Home'
 
-describe("Home", () => {
-  it("should go to List page", () => {
-    const { getByPlaceholderText, getByText } = render(<Home />);
+describe('Home', () => {
+  it('should go to List page', () => {
+    const { getByPlaceholderText, getByText } = render(<Home />)
 
-    fireEvent.change(getByPlaceholderText("User"), {
-      target: { value: "azagatti" },
-    });
-    fireEvent.click(getByText("Ver repos"));
+    fireEvent.change(getByPlaceholderText('User'), {
+      target: { value: 'azagatti' },
+    })
+    fireEvent.click(getByText('Ver repos'))
 
-    expect(getByPlaceholderText("User")).toHaveDisplayValue('azagatti');
-  });
-});
+    expect(getByPlaceholderText('User')).toHaveDisplayValue('azagatti')
+  })
+})
 ```
 
 O teste parece pronto, mas aparecerá um erro se rodar, se analisarmos bem a
@@ -322,34 +323,34 @@ clique do botão, posso adicionar outro `expect` e o `Matcher` como `toBeCalled`
 que verifica se a função do parâmetro do `expect` foi chamada.
 
 ```tsx
-import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import React from 'react'
+import { render, fireEvent } from '@testing-library/react'
 
-import Home from "./Home";
+import Home from './Home'
 
-const mockedHistoryPush = jest.fn();
+const mockedHistoryPush = jest.fn()
 
-jest.mock("react-router-dom", () => {
+jest.mock('react-router-dom', () => {
   return {
     useHistory: () => ({
       push: mockedHistoryPush,
     }),
-  };
-});
+  }
+})
 
-describe("Home", () => {
-  it("should go to List page", () => {
-    const { getByPlaceholderText, getByText } = render(<Home />);
+describe('Home', () => {
+  it('should go to List page', () => {
+    const { getByPlaceholderText, getByText } = render(<Home />)
 
-    fireEvent.change(getByPlaceholderText("User"), {
-      target: { value: "azagatti" },
-    });
-    fireEvent.click(getByText("Ver repos"));
+    fireEvent.change(getByPlaceholderText('User'), {
+      target: { value: 'azagatti' },
+    })
+    fireEvent.click(getByText('Ver repos'))
 
-    expect(getByPlaceholderText("User")).toHaveDisplayValue('azagatti');
-    expect(mockedHistoryPush).toBeCalled();
-  });
-});
+    expect(getByPlaceholderText('User')).toHaveDisplayValue('azagatti')
+    expect(mockedHistoryPush).toBeCalled()
+  })
+})
 ```
 
 Esse é um teste simples mas com ele consegui explicar grande dos conceitos
@@ -359,66 +360,68 @@ Com a maioria dos conceitos já explicados, no teste da página `List` vou focar
 novos conceitos.
 
 ```tsx
-import React from "react";
-import { render, waitFor } from "@testing-library/react";
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
+import React from 'react'
+import { render, waitFor } from '@testing-library/react'
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 
-import List from "./List";
+import List from './List'
 
-const apiMock = new MockAdapter(axios);
+const apiMock = new MockAdapter(axios)
 
 const mocksRepos = [
   {
     id: 1,
-    name: "Repo01",
-    description: "Description01",
-    url: "about:blank",
-    stargazers_count: "1",
-    forks: "2",
-    open_issues: "3",
+    name: 'Repo01',
+    description: 'Description01',
+    url: 'about:blank',
+    stargazers_count: '1',
+    forks: '2',
+    open_issues: '3',
   },
   {
     id: 2,
-    name: "Repo02",
-    description: "Description02",
-    url: "about:blank",
-    stargazers_count: "4",
-    forks: "5",
-    open_issues: "6",
+    name: 'Repo02',
+    description: 'Description02',
+    url: 'about:blank',
+    stargazers_count: '4',
+    forks: '5',
+    open_issues: '6',
   },
-];
+]
 
-jest.mock("react-router-dom", () => {
+jest.mock('react-router-dom', () => {
   return {
     useLocation: () => ({
-      pathname: "/list",
-      state: { name: "azagatti" },
+      pathname: '/list',
+      state: { name: 'azagatti' },
     }),
     Link: ({ children }: { children: React.ReactNode }) => children,
-  };
-});
+  }
+})
 
-describe("List", () => {
-  it("should load repos", async () => {
-    apiMock.onGet("https://api.github.com/users/azagatti/repos").reply(200, mocksRepos);
-    const { getByText } = render(<List />);
+describe('List', () => {
+  it('should load repos', async () => {
+    apiMock
+      .onGet('https://api.github.com/users/azagatti/repos')
+      .reply(200, mocksRepos)
+    const { getByText } = render(<List />)
 
     await waitFor(() => {
-      expect(getByText("Repo01")).toBeInTheDocument();
-      expect(getByText("Repo02")).toBeInTheDocument();
-    });
-  });
-});
+      expect(getByText('Repo01')).toBeInTheDocument()
+      expect(getByText('Repo02')).toBeInTheDocument()
+    })
+  })
+})
 ```
 
 Outra biblioteca? axios-mock-adapter? Sim, ela é utilizada para facilitar a
-criação de mocks com o `axios`, caso esteja utilizando fetch existe 
+criação de mocks com o `axios`, caso esteja utilizando fetch existe
 [esse pacote](https://www.npmjs.com/package/fetch-mock) e muitos outros.
 [Onde trabalho](https://www.linkedin.com/company/zedelivery/) utilizamos
 [GraphQL](https://graphql.org/) com a biblioteca
 [Apollo Client](https://www.apollographql.com/docs/) e a própria biblioteca
-fornece uma forma de 
+fornece uma forma de
 [mockar as chamadas.](https://www.apollographql.com/docs/react/development-testing/testing/#an-introduction)
 
 Nesse teste é mockada novamente a biblioteca `react-router-dom`, mas dessa vez o

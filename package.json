@@ -11,6 +11,9 @@
     "@emotion/react": "^11",
     "@emotion/server": "^11",
     "@emotion/styled": "^11",
+    "@kentcdodds/md-temp": "^1.1.0",
+    "@remark-embedder/core": "^2.0.0",
+    "@remark-embedder/transformer-oembed": "^2.0.0",
     "@remix-run/node": "^1.6.0",
     "@remix-run/react": "^1.6.0",
     "@remix-run/vercel": "^1.6.0",
@@ -20,7 +23,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "reading-time": "^1.5.0",
-    "remark-mdx-images": "^1.0.3"
+    "remark-autolink-headings": "^7.0.1",
+    "remark-gfm": "^3.0.1",
+    "remark-mdx-images": "^1.0.3",
+    "remark-slug": "^7.0.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.6.0",
