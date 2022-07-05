@@ -23,12 +23,6 @@ const slugList: string[] = []
 const postsLists: Post[] = []
 const articlesCache = new Map()
 
-console.log({
-  dir1: fsSync.readdirSync(__dirname),
-  dir2: fsSync.readdirSync(path.resolve(__dirname, '..')),
-  dir3: fsSync.readdirSync(path.resolve(__dirname, '..', '..')),
-})
-
 const remarkPlugins: any = [
   remarkCodeBlocksShiki,
   [
@@ -47,6 +41,11 @@ const calculateReadingTime = async (slug: string) => {
 }
 
 const getSlugList = async () => {
+  console.log({
+    dir1: fsSync.readdirSync(__dirname),
+    dir2: fsSync.readdirSync(path.resolve(__dirname, '..')),
+    dir3: fsSync.readdirSync(path.resolve(__dirname, '..', '..')),
+  })
   if (slugList.length) {
     return slugList
   } else {
