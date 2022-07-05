@@ -14,7 +14,10 @@ interface Post {
   slug: string
 }
 
-const postsDir = path.resolve(__dirname, '..', 'content', 'posts')
+const postsDir =
+  process.env.NODE_ENV === 'production'
+    ? path.resolve(__dirname, '..', '..', 'app', 'content', 'posts')
+    : path.resolve(__dirname, '..', 'app', 'content', 'posts')
 const slugList: string[] = []
 const postsLists: Post[] = []
 const articlesCache = new Map()
@@ -109,7 +112,7 @@ export const getArticle = async (slug: string): Promise<Post> => {
   const { default: remarkSlug } = await import('remark-slug')
   const { default: gfm } = await import('remark-gfm')
 
-  const cachedArticle = articlesCache.get(slug)
+  const cachedArticle = articlesCache.get(articlesCache)
   if (cachedArticle) {
     return cachedArticle
   } else {
