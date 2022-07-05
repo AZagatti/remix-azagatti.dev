@@ -10,6 +10,6 @@ module.exports = {
   ignoredRouteFiles: ['**/.*'],
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
-  serverBuildPath: 'public/api/index.js',
+  // serverBuildPath: "api/index.js",
   // publicPath: "/build/",
 }

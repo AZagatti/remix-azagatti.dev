@@ -1,4 +1,5 @@
 import fs from 'fs/promises'
+import fsSync from 'fs'
 import { bundleMDX } from 'mdx-bundler'
 import path from 'path'
 import { remarkCodeBlocksShiki } from '@kentcdodds/md-temp'
@@ -21,6 +22,12 @@ const postsDir =
 const slugList: string[] = []
 const postsLists: Post[] = []
 const articlesCache = new Map()
+
+console.log({
+  dir1: fsSync.readdirSync(__dirname),
+  dir2: fsSync.readdirSync(path.resolve(__dirname, '..')),
+  dir3: fsSync.readdirSync(path.resolve(__dirname, '..', '..')),
+})
 
 const remarkPlugins: any = [
   remarkCodeBlocksShiki,
