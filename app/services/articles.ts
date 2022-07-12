@@ -16,8 +16,8 @@ const articlesCache = new Map()
 
 const postsDir =
   process.env.NODE_ENV === 'production'
-    ? path.resolve(__dirname, '..', '..', 'content', 'posts')
-    : path.resolve(__dirname, '..', 'content', 'posts')
+    ? path.resolve(process.cwd(), '..', 'app', 'content', 'posts')
+    : path.resolve(__dirname, '..', 'app', 'content', 'posts')
 
 const getSlugList = async () => {
   const files = (await fs.readdir(postsDir)).filter((file) => !/^\./.test(file))
