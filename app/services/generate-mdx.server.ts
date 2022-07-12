@@ -1,21 +1,11 @@
 import { bundleMDX } from 'mdx-bundler'
-import fs from 'fs/promises'
-import path from 'path'
 import { remarkCodeBlocksShiki } from '@kentcdodds/md-temp'
 import remarkEmbedder from '@remark-embedder/core'
 import oembedTransformer from '@remark-embedder/transformer-oembed'
 import calcReadingTime from 'reading-time'
 import { remarkMdxImages } from 'remark-mdx-images'
 
-const postsDir =
-  process.env.NODE_ENV === 'production'
-    ? path.resolve(__dirname, '..', '..', 'content', 'posts')
-    : path.resolve(__dirname, '..', 'content', 'posts')
-
-const calculateReadingTime = async (slug: string) => {
-  const text = await fs.readFile(path.join(postsDir, slug, 'index.mdx'), {
-    encoding: 'utf-8',
-  })
+const calculateReadingTime = async (text: string) => {
   return Math.round(calcReadingTime(text).minutes)
 }
 
@@ -29,28 +19,32 @@ const remarkPlugins: any = [
   ],
 ]
 
-const getSlugList = async () => {
-  const files = (await fs.readdir(postsDir)).filter((file) => !/^\./.test(file))
-  return files
+interface GenerateMdxListParams {
+  slugList: string[]
+  sourceList: { slug: string; source: string }[]
+  textList: { slug: string; text: string }[]
+  cwdList: { slug: string; cwd: string }[]
 }
 
-export const generateMdxList = async () => {
+export const generateMdxList = async ({
+  slugList,
+  sourceList,
+  textList,
+  cwdList,
+}: GenerateMdxListParams) => {
   const { default: remarkAutolinkHeadings } = await import(
     'remark-autolink-headings'
   )
   const { default: remarkSlug } = await import('remark-slug')
   const { default: gfm } = await import('remark-gfm')
 
-  const slugList = await getSlugList()
   const generatedMdx = (
     await Promise.all(
       slugList.map(async (slug) => ({
         slug,
         post: await bundleMDX({
-          source: await fs.readFile(path.join(postsDir, slug, 'index.mdx'), {
-            encoding: 'utf-8',
-          }),
-          cwd: path.join(postsDir, slug),
+          source: sourceList.find((obj) => obj.slug === slug)?.source ?? '',
+          cwd: cwdList.find(obj => obj.slug === slug)?.cwd ?? '',
           mdxOptions: (options) => {
             options.remarkPlugins = [
               ...(options.remarkPlugins ?? []),
@@ -71,7 +65,9 @@ export const generateMdxList = async () => {
           },
         }),
         image: `images/${slug}/banner.png`,
-        readingTime: ` ${await calculateReadingTime(slug)} min de leitura`,
+        readingTime: ` ${await calculateReadingTime(
+          textList.find((obj) => obj.slug === slug)?.text ?? ''
+        )} min de leitura`,
       }))
     )
   ).sort((a, z) => {
@@ -83,7 +79,19 @@ export const generateMdxList = async () => {
   return { slugList, generatedMdx }
 }
 
-export const generateMdxFromSlug = async (slug: string) => {
+interface GenerateMdxFromSlugParams {
+  slug: string
+  source: string
+  text: string
+  cwd: string
+}
+
+export const generateMdxFromSlug = async ({
+  slug,
+  source,
+  text,
+  cwd,
+}: GenerateMdxFromSlugParams) => {
   const { default: remarkAutolinkHeadings } = await import(
     'remark-autolink-headings'
   )
@@ -93,10 +101,8 @@ export const generateMdxFromSlug = async (slug: string) => {
   const generatedMdx = {
     slug,
     post: await bundleMDX({
-      source: await fs.readFile(path.join(postsDir, slug, 'index.mdx'), {
-        encoding: 'utf-8',
-      }),
-      cwd: path.join(postsDir, slug),
+      source,
+      cwd,
       mdxOptions: (options) => {
         options.remarkPlugins = [
           ...(options.remarkPlugins ?? []),
@@ -116,7 +122,7 @@ export const generateMdxFromSlug = async (slug: string) => {
         return options
       },
     }),
-    readingTime: ` ${await calculateReadingTime(slug)} min de leitura`,
+    readingTime: ` ${await calculateReadingTime(text)} min de leitura`,
   }
 
   return { generatedMdx }
