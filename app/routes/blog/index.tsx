@@ -1,6 +1,6 @@
 import { useLoaderData } from '@remix-run/react'
 import { ArticlesList } from '~/components/articles-list'
-import { getArticlesList } from '~/services/articles.server'
+import { getArticlesList } from '~/services/articles'
 
 export const loader = async () => {
   const mdx = await getArticlesList()

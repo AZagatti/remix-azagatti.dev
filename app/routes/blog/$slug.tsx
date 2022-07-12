@@ -4,7 +4,7 @@ import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { getMDXComponent } from 'mdx-bundler/client'
 import { useMemo } from 'react'
-import { getArticle } from '~/services/articles.server'
+import { getArticle } from '~/services/articles'
 import { formatDate } from '~/utils/formatDate'
 
 export const loader: LoaderFunction = async ({ params }) => {
