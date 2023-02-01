@@ -1,12 +1,6 @@
 node_modules
 
-.vscode
-.cache
-.env
-.vercel
-.output
-
-/build/
+/.cache
+/build
 /public/build
-/api/index.js
-/api/index.js.map
+.env
